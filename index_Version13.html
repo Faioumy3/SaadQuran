@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مكتب تحفيظ الشيخ سعد بن محمود أبو نوارج</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+  <!-- Google Fonts - Amiri Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+  <style>
+    body, h1, h2, h3, h4, h5, h6, p, div, span, a, .main-title, .card, .greeting, .welcome-msg, .contact-section, .whatsapp-link, .fixed-footer {
+      font-family: 'Amiri', serif !important;
+    }
+    body {
+      background: linear-gradient(to bottom right, #f5efe6, #c0e6c9 70%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      text-align: center;
+    }
+    .main-title {
+      font-size: 2.0rem;
+      font-weight: bold;
+      color: #147a3d;
+      margin-top: 32px;
+      letter-spacing: 1px;
+      line-height: 1.2;
+      text-align: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(80, 180, 82, 0.10);
+      margin-top: 22px;
+      margin-bottom: 0;
+      padding: 1rem;
+      font-size: 1rem;
+      direction: rtl;
+      text-align: center;
+    }
+    .greeting {
+      font-size: 1.3rem;
+      color: #26ac68;
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
+    }
+    .salgon {
+      font-size: 1rem;
+      color: #000000;
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .welcome-msg {
+      color: #000000;
+      font-size: 1.1rem;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      line-height: 1.7;
+      text-align: center;
+    }
+    .contact-section {
+      font-size: 1rem;
+      padding-top: 7px;
+      padding-bottom: 7px;
+      text-align: center;
+      direction: rtl;
+    }
+    .whatsapp-link {
+      font-weight: bold;
+      color: #25d366;
+      text-decoration: none;
+      font-size: 1.03rem;
+      direction: rtl;
+    }
+    .fixed-footer {
+      position: fixed;
+      width: 100vw;
+      left: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.90);
+      box-shadow: 0px -2px 10px rgba(80, 180, 82, 0.08);
+      padding: 7px 0;
+      z-index: 200;
+      direction: rtl;
+      text-align: center;
+    }
+    /* ========== Login Page Styles ========== */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #f5efe6, #c0e6c9 70%);
+    }
+    .login-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(80, 180, 82, 0.15);
+      padding: 2rem;
+      max-width: 400px;
+      width: 100%;
+    }
+    .login-title {
+      font-size: 1.8rem;
+      color: #147a3d;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: 500;
+      text-align: right;
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Amiri', serif !important;
+      text-align: right;
+      direction: rtl;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: #26ac68;
+      box-shadow: 0 0 8px rgba(38, 172, 104, 0.2);
+    }
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Amiri', serif !important;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: #26ac68;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #147a3d;
+    }
+    .btn-secondary {
+      background: #ddd;
+      color: #333;
+      margin-top: 0.5rem;
+    }
+    .btn-secondary:hover {
+      background: #ccc;
+    }
+    .error-message {
+      color: #d32f2f;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    .success-message {
+      color: #26ac68;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    
+    /* ========== Attendance Page Styles ========== */
+    .attendance-container {
+      background: linear-gradient(to bottom right, #f5efe6, #c0e6c9 70%);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      padding-bottom: 150px;
+    }
+    .attendance-header {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 12px rgba(80, 180, 82, 0.10);
+      text-align: center;
+    }
+    .attendance-title {
+      font-size: 1.5rem;
+      color: #147a3d;
+      margin: 0;
+      font-weight: bold;
+    }
+    .teacher-info {
+      font-size: 0.95rem;
+      color: #26ac68;
+      margin-top: 0.5rem;
+    }
+    .student-form {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 12px rgba(80, 180, 82, 0.10);
+    }
+    .student-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      padding: 1rem;
+      border: 1px solid #e0e0e0;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      transition: all 0.3s ease;
+    }
+    .student-item:hover {
+      box-shadow: 0 2px 8px rgba(80, 180, 82, 0.15);
+      border-color: #26ac68;
+    }
+    .student-item:last-child {
+      margin-bottom: 0;
+    }
+    .student-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: right;
+      padding-right: 1rem;
+    }
+    .student-name {
+      font-size: 1.05rem;
+      color: #147a3d;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .student-notes-input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: 'Amiri', serif !important;
+      text-align: right;
+      direction: rtl;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    .status-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-direction: row-reverse;
+    }
+    .btn-small {
+      padding: 0.75rem 1.2rem;
+      font-size: 0.9rem;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      min-width: 90px;
+    }
+    .btn-present {
+      background: #e8f5e9;
+      color: #26ac68;
+      border-color: #26ac68;
+    }
+    .btn-present:hover {
+      background: #c8e6c9;
+    }
+    .btn-present.active {
+      background: #26ac68;
+      color: white;
+      box-shadow: 0 0 12px rgba(38, 172, 104, 0.4);
+    }
+    .btn-absent {
+      background: #ffebee;
+      color: #f44336;
+      border-color: #f44336;
+    }
+    .btn-absent:hover {
+      background: #ffcdd2;
+    }
+    .btn-absent.active {
+      background: #f44336;
+      color: white;
+      box-shadow: 0 0 12px rgba(244, 67, 54, 0.4);
+    }
+    .attendance-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem;
+      box-shadow: 0 -2px 10px rgba(80, 180, 82, 0.08);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 100;
+    }
+    .attendance-footer button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Neirizi', serif !important;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 767px) {
+      .main-title {
+        font-size: 1.2rem;
+        margin-top: 20px;
+      }
+      .greeting {
+        font-size: 1.0rem;
+        margin-top: 9px;
+      }
+      .card {
+        margin-top: 18px;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+      .welcome-msg {
+        font-size: 0.9rem;
+      }
+      .fixed-footer {
+        font-size: 0.9rem;
+        padding: 6px 0;
+      }
+      .contact-section, .whatsapp-link {
+        font-size: 0.93rem;
+      }
+      .login-card {
+        padding: 1.5rem;
+      }
+    }
+    
+    /* ========== Dashboard Styles ========== */
+    .dashboard-container {
+      background: linear-gradient(to bottom right, #f5efe6, #c0e6c9 70%);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      padding-bottom: 80px;
+    }
+    .dashboard-header {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 12px rgba(80, 180, 82, 0.10);
+      text-align: center;
+    }
+    .dashboard-title {
+      font-size: 1.8rem;
+      color: #147a3d;
+      margin: 0;
+      font-weight: bold;
+    }
+    .admin-info {
+      font-size: 0.95rem;
+      color: #26ac68;
+      margin-top: 0.5rem;
+    }
+    .filter-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 12px rgba(80, 180, 82, 0.10);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .filter-group label {
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+    .filter-group select,
+    .filter-group input {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: 'Amiri', serif !important;
+      text-align: right;
+      direction: rtl;
+    }
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(80, 180, 82, 0.10);
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    .stat-value {
+      font-size: 2rem;
+      color: #147a3d;
+      font-weight: bold;
+    }
+    .records-table {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(80, 180, 82, 0.10);
+    }
+    .records-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    .records-table thead {
+      background: #f5f5f5;
+      border-bottom: 2px solid #ddd;
+    }
+    .records-table th {
+      padding: 1rem;
+      text-align: right;
+      color: #147a3d;
+      font-weight: 600;
+    }
+    .records-table td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: right;
+    }
+    .records-table tbody tr:hover {
+      background: #f9f9f9;
+    }
+    .status-present {
+      background: #26ac68;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    .status-absent {
+      background: #f44336;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    .dashboard-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem;
+      box-shadow: 0 -2px 10px rgba(80, 180, 82, 0.08);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 100;
+      justify-content: center;
+    }
+    .dashboard-footer button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Amiri', serif !important;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #999;
+    }
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- صفحة الترحيب الرئيسية -->
+  <div id="homePage" class="container-fluid px-2" dir="rtl">
+    <div class="main-title mb-1">مكتب تحفيظ الشيخ سعد بن محمود أبو نوارج</div>
+    <div class="greeting mt-2">السلام عليكم ورحمة الله وبركاته ☺️</div>
+    <div class="row justify-content-center m-0">
+          <div class="greeting mt-2"></div>
+          <div class="greeting mt-2"></div>
+          <div class="greeting mt-2"></div>
+
+
+<div class="salgon">لَعَلَّ إِلهَ الْعَرْشِ يَا إِخْوَتِي يَقِي ... جَمَاعَتَنَا كُلَّ المَكاَرِهِ هُوَّلَا
+</div>
+<div class="salgon"> 
+وَيَجْعَلُنَا مِمَّنْ يَكُونُ كِتاَبُهُ ... شَفِيعًا لَهُمْ إِذْ مَا نَسُوْهُ فَيمْحَلَا
+</div>
+
+      <div class="col-12 col-sm-10 col-md-8 col-lg-7 px-1">
+        <div class="card welcome-card my-3 shadow-sm">
+          <div class="card-body p-0">
+            <div class="welcome-msg mb-1">
+                 متابعة حضور وغياب الطلاب والمعلمين وإدارة شؤون المكتب  <br>
+              بشكل رقمي لتسهيل الإدارة اليومية.
+            </div>
+            <button class="btn btn-primary mt-3" onclick="showLoginPage()">دخول المعلمين</button>
+            <button class="btn btn-primary mt-2" style="background: #3f51b5;" onclick="showAdminLoginPage()">لوحة التحكم</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- صفحة دخول الإدارة -->
+  <div id="adminLoginPage" style="display: none;" class="login-container" dir="rtl">
+    <div class="login-card">
+      <h2 class="login-title">دخول الإدارة</h2>
+      <div class="form-group">
+        <label for="adminPassword">كلمة السر:</label>
+        <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة السر" autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="loginAdmin()">دخول</button>
+      <div id="adminLoginError" class="error-message"></div>
+      <button class="btn btn-secondary" onclick="showHomePage()">رجوع</button>
+    </div>
+  </div>
+
+  <!-- صفحة الدخول -->
+  <div id="loginPage" style="display: none;" class="login-container" dir="rtl">
+    <div class="login-card">
+      <h2 class="login-title">دخول المعلم</h2>
+      <div class="form-group">
+        <label for="teacherCode">كود المعلم:</label>
+        <input type="text" id="teacherCode" class="form-control" placeholder="أدخل كودك" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="teacherPassword">كلمة السر:</label>
+        <input type="password" id="teacherPassword" class="form-control" placeholder="أدخل كلمة السر" autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="loginTeacher()">دخول</button>
+      <div id="loginError" class="error-message"></div>
+      <button class="btn btn-secondary" onclick="showHomePage()">رجوع</button>
+    </div>
+  </div>
+
+  <!-- صفحة تسجيل الحضور -->
+  <div id="attendancePage" style="display: none;" class="attendance-container" dir="rtl">
+    <div class="attendance-header">
+      <h2 class="attendance-title">تسجيل الحضور</h2>
+      <div class="teacher-info">
+        <span id="currentTeacherName"></span> - <span id="currentDate"></span>
+      </div>
+      <button class="btn-secondary" onclick="showManageStudentsModal()" style="background: #ff9800; color: white; margin-top: 0.5rem; padding: 0.5rem 1rem;">⚙️ إدارة الطلاب</button>
+    </div>
+
+    <!-- قائمة الطلاب (تُحمّل تلقائياً) -->
+    <div id="studentsList" class="student-form">
+      <!-- سيتم ملؤها ديناميكياً بطلاب المعلم -->
+    </div>
+
+    <!-- أزرار القاع الثابتة -->
+    <div class="attendance-footer">
+      <button class="btn-primary" onclick="saveAttendanceRecords()" style="background: #26ac68; color: white;">حفظ البيانات</button>
+      <button class="btn-secondary" onclick="logout()" style="background: #f44336; color: white;">خروج</button>
+    </div>
+  </div>
+
+  <!-- نافذة منبثقة لإدارة طلاب المعلم -->
+  <div id="manageStudentsModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;">
+    <div style="background: white; margin: 2rem auto; padding: 2rem; border-radius: 12px; max-width: 500px; width: 90%; direction: rtl;">
+      <h3 style="text-align: right; color: #147a3d; margin-bottom: 1.5rem;">إدارة الطلاب</h3>
+
+      <!-- نموذج إضافة طالب -->
+      <div style="margin-bottom: 2rem;">
+        <h5 style="color: #147a3d; margin-bottom: 1rem;">إضافة طالب جديد</h5>
+        <div class="form-group">
+          <label for="modalStudentName" style="display: block; text-align: right; margin-bottom: 0.5rem;">اسم الطالب:</label>
+          <input type="text" id="modalStudentName" class="form-control" placeholder="أدخل اسم الطالب" style="margin-bottom: 0.5rem;">
+          
+          <label for="modalStudentId" style="display: block; text-align: right; margin-bottom: 0.5rem;">رقم الهوية (ID):</label>
+          <input type="text" id="modalStudentId" class="form-control" placeholder="أدخل رقم الهوية" style="margin-bottom: 1rem;">
+        </div>
+        <button class="btn btn-primary" onclick="addStudentFromModal()" style="width: 100%; background: #26ac68; color: white; border: none; padding: 0.8rem; border-radius: 6px; cursor: pointer;">➕ إضافة الطالب</button>
+      </div>
+
+      <!-- قائمة الطلاب الحالية -->
+      <div>
+        <h5 style="color: #147a3d; margin-bottom: 1rem;">قائمة الطلاب الحالية</h5>
+        <div id="modalStudentsList" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 1rem;">
+          <!-- سيتم ملؤها ديناميكياً -->
+        </div>
+      </div>
+
+      <!-- أزرار الإغلاق -->
+      <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn btn-secondary" onclick="closeManageStudentsModal()" style="background: #f44336; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer;">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer للصفحة الرئيسية فقط -->
+  <footer class="fixed-footer" id="mainFooter">
+    <div class="container-fluid contact-section">
+      <span class="me-1">تواصل معنا عبر الواتس  آب 💬 </span>
+      <a class="whatsapp-link" href="https://wa.me/201060936428" target="_blank">
+        01060936428
+      </a>
+    </div>
+  </footer>
+
+  <!-- صفحة إدارة طلاب المعلمين -->
+  <div id="teacherStudentsPage" style="display: none;" class="dashboard-container" dir="rtl">
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">إدارة طلاب المعلمين</h2>
+      <div class="admin-info">
+        إضافة وتعديل وحذف طلاب كل معلم
+      </div>
+    </div>
+
+    <!-- اختيار المعلم -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">اختر المعلم</h5>
+      <select id="selectTeacher" class="form-control" onchange="loadTeacherStudentsForEdit()">
+        <option value="">-- اختر معلماً --</option>
+        <option value="eman">إيمان الصباغ</option>
+        <option value="samar">سمر الشاعر</option>
+      </select>
+    </div>
+
+    <!-- نموذج إضافة طالب جديد للمعلم -->
+    <div class="student-form" id="addStudentFormContainer" style="display: none;">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">إضافة طالب جديد</h5>
+      <div class="form-group">
+        <label for="teacherStudentName">اسم الطالب:</label>
+        <input type="text" id="teacherStudentName" class="form-control" placeholder="أدخل اسم الطالب" autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="addStudentToTeacher()">إضافة الطالب</button>
+    </div>
+
+    <!-- قائمة طلاب المعلم -->
+    <div class="student-form" id="teacherStudentsListContainer" style="display: none;">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">قائمة الطلاب الحالية</h5>
+      <div id="teacherStudentsList" style="max-height: 400px; overflow-y: auto;">
+        <!-- سيتم ملؤها ديناميكياً -->
+      </div>
+    </div>
+
+    <!-- أزرار القاع -->
+    <div class="dashboard-footer">
+      <button class="btn-primary" style="background: #26ac68; color: white;" onclick="showDashboardPage()">رجوع</button>
+      <button class="btn-secondary" style="background: #f44336; color: white;" onclick="logoutAdmin()">خروج</button>
+    </div>
+  </div>
+
+  <!-- صفحة إدارة الطلاب -->
+  <div id="studentsManagementPage" style="display: none;" class="dashboard-container" dir="rtl">
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">إدارة الطلاب</h2>
+      <div class="admin-info">
+        إضافة وتعديل وحذف الطلاب
+      </div>
+    </div>
+
+    <!-- نموذج إضافة طالب جديد -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">إضافة طالب جديد</h5>
+      <div class="form-group">
+        <label for="newStudentName">اسم الطالب:</label>
+        <input type="text" id="newStudentName" class="form-control" placeholder="أدخل اسم الطالب" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="newStudentClass">المستوى:</label>
+        <select id="newStudentClass" class="form-control">
+          <option value="المستوى الأول">المستوى الأول</option>
+          <option value="المستوى الثاني">المستوى الثاني</option>
+          <option value="المستوى الثالث">المستوى الثالث</option>
+          <option value="المستوى الرابع">المستوى الرابع</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="addNewStudent()">إضافة الطالب</button>
+    </div>
+
+    <!-- قائمة الطلاب الحالية -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">قائمة الطلاب الحالية</h5>
+      <div id="studentsList" style="max-height: 400px; overflow-y: auto;">
+        <!-- سيتم ملؤها ديناميكياً -->
+      </div>
+    </div>
+
+    <!-- أزرار القاع -->
+    <div class="dashboard-footer">
+      <button class="btn-primary" style="background: #26ac68; color: white;" onclick="showDashboardPage()">رجوع</button>
+      <button class="btn-secondary" style="background: #f44336; color: white;" onclick="logoutAdmin()">خروج</button>
+    </div>
+  </div>
+
+  <!-- صفحة التقارير المخصصة للمعلمين -->
+  <div id="teacherReportsPage" style="display: none;" class="dashboard-container" dir="rtl">
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">تقارير المعلمين</h2>
+      <div class="admin-info">
+        تقارير يومية ودورية لكل معلم
+      </div>
+    </div>
+
+    <!-- اختيار المعلم -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">اختر المعلم</h5>
+      <select id="selectTeacherForReport" class="form-control">
+        <option value="">-- اختر معلماً --</option>
+        <option value="eman">إيمان الصباغ</option>
+        <option value="samar">سمر الشاعر</option>
+      </select>
+    </div>
+
+    <!-- قسم التقارير اليومية -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">📊 التقرير اليومي</h5>
+      <p style="text-align: right; color: #666; font-size: 0.9rem;">احصل على تقرير بسجلات اليوم للمعلم المختار</p>
+      <button class="btn btn-primary" style="background: #4CAF50;" onclick="exportDailyTeacherReport()">تحميل التقرير اليومي</button>
+    </div>
+
+    <!-- قسم التقارير الأسبوعية -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">📅 التقرير الأسبوعي</h5>
+      <p style="text-align: right; color: #666; font-size: 0.9rem;">احصل على ملخص لآخر 7 أيام</p>
+      <button class="btn btn-primary" style="background: #2196F3;" onclick="exportWeeklyTeacherReport()">تحميل التقرير الأسبوعي</button>
+    </div>
+
+    <!-- إحصائيات المعلم -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">📈 إحصائيات المعلم</h5>
+      <div id="teacherStatsContainer">
+        <p style="text-align: center; color: #999;">اختر معلماً لعرض الإحصائيات</p>
+      </div>
+    </div>
+
+    <!-- أزرار القاع -->
+    <div class="dashboard-footer">
+      <button class="btn-primary" style="background: #26ac68; color: white;" onclick="showDashboardPage()">رجوع</button>
+      <button class="btn-secondary" style="background: #f44336; color: white;" onclick="logoutAdmin()">خروج</button>
+    </div>
+  </div>
+
+  <!-- صفحة النسخ الاحتياطية والتقارير -->
+  <div id="backupReportsPage" style="display: none;" class="dashboard-container" dir="rtl">
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">النسخ الاحتياطية والتقارير</h2>
+      <div class="admin-info">
+        إنشاء وإدارة النسخ الاحتياطية والتقارير
+      </div>
+    </div>
+
+    <!-- قسم النسخ الاحتياطية -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">🔐 النسخ الاحتياطية</h5>
+      <p style="text-align: right; color: #666; font-size: 0.9rem;">احفظ نسخة كاملة من كل البيانات</p>
+      <button class="btn btn-primary" style="background: #4CAF50;" onclick="createAndDownloadBackup()">إنشاء نسخة احتياطية</button>
+      <div style="margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 8px; text-align: right;">
+        <label for="backupFile" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">استعادة من نسخة احتياطية:</label>
+        <input type="file" id="backupFile" accept=".json" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #ddd;">
+        <button class="btn btn-primary" style="background: #2196F3; margin-top: 0.5rem;" onclick="restoreFromBackup()">استعادة</button>
+      </div>
+    </div>
+
+    <!-- قسم التقارير الشهرية -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">📊 التقارير الشهرية</h5>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+        <div>
+          <label for="reportYear" style="display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">السنة:</label>
+          <select id="reportYear" class="form-control">
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+          </select>
+        </div>
+        <div>
+          <label for="reportMonth" style="display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">الشهر:</label>
+          <select id="reportMonth" class="form-control">
+            <option value="1">يناير</option>
+            <option value="2">فبراير</option>
+            <option value="3">مارس</option>
+            <option value="4">أبريل</option>
+            <option value="5">مايو</option>
+            <option value="6">يونيو</option>
+            <option value="7">يوليو</option>
+            <option value="8">أغسطس</option>
+            <option value="9">سبتمبر</option>
+            <option value="10">أكتوبر</option>
+            <option value="11">نوفمبر</option>
+            <option value="12">ديسمبر</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="background: #FF9800;" onclick="generateAndExportMonthlyReport()">تحميل التقرير الشهري</button>
+    </div>
+
+    <!-- قسم إرسال التقارير اليومية -->
+    <div class="student-form">
+      <h5 style="color: #147a3d; margin-bottom: 1rem; text-align: right;">📧 التقارير اليومية</h5>
+      <div class="form-group">
+        <label for="adminEmail">البريد الإلكتروني:</label>
+        <input type="email" id="adminEmail" class="form-control" placeholder="your@email.com" value="admin@saadquran.com">
+      </div>
+      <p style="text-align: right; color: #999; font-size: 0.85rem;">ملاحظة: سيتم إرسال تقرير يومي بجميع سجلات اليوم</p>
+      <button class="btn btn-primary" style="background: #3f51b5;" onclick="sendDailyEmailReport()">إرسال التقرير اليومي</button>
+    </div>
+
+    <!-- أزرار القاع -->
+    <div class="dashboard-footer">
+      <button class="btn-primary" style="background: #26ac68; color: white;" onclick="showDashboardPage()">رجوع</button>
+      <button class="btn-secondary" style="background: #f44336; color: white;" onclick="logoutAdmin()">خروج</button>
+    </div>
+  </div>
+
+  <!-- صفحة لوحة التحكم الإدارية (Dashboard) -->
+  <div id="dashboardPage" style="display: none;" class="dashboard-container" dir="rtl">
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">لوحة التحكم الإدارية</h2>
+      <div class="admin-info">
+        تاريخ اليوم: <span id="adminDate"></span>
+      </div>
+    </div>
+
+    <!-- قسم التصفية -->
+    <div class="filter-section">
+      <button class="btn btn-primary" style="padding: 0.5rem 1.5rem; margin-top: 1.5rem;" onclick="refreshDashboard()">تحديث البيانات</button>
+      <div class="filter-group">
+        <label for="filterTeacher">البحث حسب المعلم:</label>
+        <select id="filterTeacher" onchange="refreshDashboard()">
+          <option value="">الكل</option>
+          <option value="eman">إيمان</option>
+          <option value="samar">سمر</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filterDate">التاريخ:</label>
+        <input type="date" id="filterDate" onchange="refreshDashboard()">
+      </div>
+    </div>
+
+    <!-- قسم الإحصائيات -->
+    <div class="stats-section" id="statsSection">
+      <!-- سيتم ملؤها ديناميكياً -->
+    </div>
+
+    <!-- جدول السجلات -->
+    <div class="records-table">
+      <table id="recordsTable">
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>المعلم</th>
+            <th>اسم الطالب</th>
+            <th>الحالة</th>
+            <th>الملاحظات</th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody">
+          <!-- سيتم ملؤها ديناميكياً -->
+        </tbody>
+      </table>
+      <div id="emptyState" class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <p>لا توجد سجلات لتعرضها</p>
+      </div>
+    </div>
+
+    <!-- أزرار القاع الثابتة -->
+    <div class="dashboard-footer">
+      <button class="btn-primary" style="background: #26ac68; color: white;" onclick="exportToCSV_Dashboard()">تحميل CSV</button>
+      <button class="btn-primary" style="background: #9C27B0; color: white;" onclick="showTeacherStudentsPage()">👥 طلاب المعلمين</button>
+      <button class="btn-primary" style="background: #FF5722; color: white;" onclick="showTeacherReportsPage()">📊 تقارير المعلمين</button>
+      <button class="btn-primary" style="background: #2196F3; color: white;" onclick="showStudentsManagementPage()">إدارة الطلاب</button>
+      <button class="btn-primary" style="background: #FF9800; color: white;" onclick="showBackupReportsPage()">النسخ والتقارير</button>
+      <button class="btn-secondary" style="background: #f44336; color: white;" onclick="logoutAdmin()">خروج</button>
+    </div>
+  </div>
+
+  <!-- Firebase Config -->
+  <script src="firebase-config.js"></script>
+  <script>
+    let currentTeacher = null;
+    let attendanceData = {};
+
+    // عرض صفحة الترحيب
+    function showHomePage() {
+      document.getElementById('homePage').style.display = 'block';
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('adminLoginPage').style.display = 'none';
+      document.getElementById('attendancePage').style.display = 'none';
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('mainFooter').style.display = 'block';
+    }
+
+    // عرض صفحة الدخول الإدارية
+    function showAdminLoginPage() {
+      document.getElementById('homePage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('adminLoginPage').style.display = 'flex';
+      document.getElementById('attendancePage').style.display = 'none';
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('mainFooter').style.display = 'none';
+      document.getElementById('adminPassword').focus();
+    }
+
+    // دخول الإدارة
+    function loginAdmin() {
+      const password = document.getElementById('adminPassword').value.trim();
+      const errorDiv = document.getElementById('adminLoginError');
+      errorDiv.textContent = '';
+
+      const adminPassword = 'admin2025'; // يمكنك تغييرها
+
+      if (!password) {
+        errorDiv.textContent = 'الرجاء إدخال كلمة السر';
+        return;
+      }
+
+      if (password === adminPassword) {
+        document.getElementById('adminPassword').value = '';
+        showDashboardPage();
+      } else {
+        errorDiv.textContent = 'كلمة السر غير صحيحة';
+      }
+    }
+
+    // عرض صفحة الدخول
+    function showLoginPage() {
+      document.getElementById('homePage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('attendancePage').style.display = 'none';
+      document.getElementById('mainFooter').style.display = 'none';
+      document.getElementById('teacherCode').focus();
+    }
+
+    // عرض صفحة الحضور
+    function showAttendancePage() {
+      document.getElementById('homePage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('attendancePage').style.display = 'block';
+      document.getElementById('mainFooter').style.display = 'none';
+      updateDateDisplay();
+      loadTeacherStudents();
+    }
+
+    // دخول المعلم
+    async function loginTeacher() {
+      const code = document.getElementById('teacherCode').value.trim();
+      const password = document.getElementById('teacherPassword').value.trim();
+      const errorDiv = document.getElementById('loginError');
+      errorDiv.textContent = '';
+
+      if (!code) {
+        errorDiv.textContent = 'الرجاء إدخال الكود';
+        return;
+      }
+
+      if (!password) {
+        errorDiv.textContent = 'الرجاء إدخال كلمة السر';
+        return;
+      }
+
+      // التحقق من المعلم من Firebase مع كلمة السر
+      const teacher = await authenticateTeacher(code, password);
+      
+      if (teacher) {
+        currentTeacher = teacher;
+        attendanceData = {};
+        document.getElementById('currentTeacherName').textContent = teacher.name || teacher.code;
+        showAttendancePage();
+      } else {
+        errorDiv.textContent = 'الكود أو كلمة السر غير صحيحة. حاول مرة أخرى.';
+      }
+    }
+
+    // تحميل طلاب المعلم الحالي تلقائياً
+    function loadTeacherStudents() {
+      if (!currentTeacher) {
+        return;
+      }
+
+      // امسح البيانات السابقة
+      attendanceData = {};
+
+      // احصل على طلاب المعلم من teachersDB
+      const teacher = teachersDB[currentTeacher.code];
+      if (teacher && teacher.students && teacher.students.length > 0) {
+        teacher.students.forEach(student => {
+          attendanceData[student.name] = { status: null, notes: '', id: student.id };
+        });
+      }
+
+      renderStudentsList();
+    }
+
+    // تحديث حالة الطالب
+    function updateStudentStatus(name, status) {
+      if (attendanceData[name]) {
+        attendanceData[name].status = attendanceData[name].status === status ? null : status;
+        renderStudentsList();
+      }
+    }
+
+    // تحديث الملاحظات
+    function updateStudentNotes(name, notes) {
+      if (attendanceData[name]) {
+        attendanceData[name].notes = notes;
+      }
+    }
+
+    // عرض قائمة الطلاب محسّنة
+    function renderStudentsList() {
+      const listDiv = document.getElementById('studentsList');
+      
+      if (Object.keys(attendanceData).length === 0) {
+        listDiv.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;"><p>لا يوجد طلاب معينة للمعلم</p></div>';
+        return;
+      }
+
+      let html = '';
+      const studentNames = Object.keys(attendanceData);
+      
+      studentNames.forEach((name, index) => {
+        const data = attendanceData[name];
+        const presentActive = data.status === 'present' ? 'active' : '';
+        const absentActive = data.status === 'absent' ? 'active' : '';
+        
+        html += `
+          <div class="student-item">
+            <div class="student-info">
+              <div class="student-name">📚 ${name}</div>
+              <input type="text" class="student-notes-input" 
+                     placeholder="ملاحظات (اختياري)" 
+                     onchange="updateStudentNotes('${name}', this.value)"
+                     value="${data.notes || ''}">
+            </div>
+            <div class="status-buttons">
+              <button class="btn-small btn-absent ${absentActive}" 
+                      onclick="updateStudentStatus('${name}', 'absent')">✗ غائب</button>
+              <button class="btn-small btn-present ${presentActive}" 
+                      onclick="updateStudentStatus('${name}', 'present')">✓ حاضر</button>
+            </div>
+          </div>
+        `;
+      });
+      
+      listDiv.innerHTML = html;
+    }
+
+    // حفظ السجلات
+    async function saveAttendanceRecords() {
+      if (Object.keys(attendanceData).length === 0) {
+        alert('الرجاء إضافة طلاب على الأقل');
+        return;
+      }
+
+      let hasUnsaved = false;
+      for (const [name, data] of Object.entries(attendanceData)) {
+        if (!data.status) {
+          hasUnsaved = true;
+          break;
+        }
+      }
+
+      if (hasUnsaved) {
+        if (!confirm('هناك طلاب لم تحدد حالتهم. هل تريد المتابعة على أي حال؟')) {
+          return;
+        }
+      }
+
+      // حفظ كل سجل في Firebase
+      for (const [name, data] of Object.entries(attendanceData)) {
+        if (data.status) {
+          await saveAttendance(currentTeacher.code, name, data.status, data.notes);
+        }
+      }
+
+      alert('تم حفظ البيانات بنجاح ✓');
+      logout();
+    }
+
+    // تحديث التاريخ
+    function updateDateDisplay() {
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('currentDate').textContent = dateStr;
+    }
+    // ========== دوال إدارة الطلاب من صفحة الحضور ==========
+    
+    // فتح نافذة إدارة الطلاب
+    function showManageStudentsModal() {
+      if (!currentTeacher) {
+        alert('الرجاء تسجيل الدخول أولاً');
+        return;
+      }
+      
+      document.getElementById('manageStudentsModal').style.display = 'block';
+      renderModalStudentsList();
+    }
+
+    // إغلاق نافذة إدارة الطلاب
+    function closeManageStudentsModal() {
+      document.getElementById('manageStudentsModal').style.display = 'none';
+      document.getElementById('modalStudentName').value = '';
+      document.getElementById('modalStudentId').value = '';
+    }
+
+    // إضافة طالب من النافذة المنبثقة
+    function addStudentFromModal() {
+      if (!currentTeacher) {
+        alert('الرجاء تسجيل الدخول أولاً');
+        return;
+      }
+
+      const studentName = document.getElementById('modalStudentName').value.trim();
+      const studentId = document.getElementById('modalStudentId').value.trim();
+
+      if (!studentName) {
+        alert('الرجاء إدخال اسم الطالب');
+        return;
+      }
+
+      if (!studentId) {
+        alert('الرجاء إدخال رقم الهوية');
+        return;
+      }
+
+      const teacher = teachersDB[currentTeacher.code];
+      
+      // تحقق من عدم وجود الطالب مسبقاً
+      if (teacher.students.some(s => s.name === studentName)) {
+        alert('الطالب موجود بالفعل عند هذا المعلم');
+        return;
+      }
+
+      // أضف الطالب الجديد
+      const newStudent = {
+        id: studentId,
+        name: studentName
+      };
+
+      teacher.students.push(newStudent);
+      alert('تم إضافة الطالب بنجاح ✓');
+      
+      // امسح النموذج وأعد تحميل البيانات
+      document.getElementById('modalStudentName').value = '';
+      document.getElementById('modalStudentId').value = '';
+      
+      // أعد تحميل قائمة الطلاب في كل من النافذة المنبثقة وصفحة الحضور
+      renderModalStudentsList();
+      loadTeacherStudents();
+    }
+
+    // عرض قائمة طلاب المعلم في النافذة المنبثقة
+    function renderModalStudentsList() {
+      if (!currentTeacher) return;
+
+      const teacher = teachersDB[currentTeacher.code];
+      const container = document.getElementById('modalStudentsList');
+
+      if (!teacher || !teacher.students || teacher.students.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #999;">لا يوجد طلاب بعد</p>';
+        return;
+      }
+
+      let html = '';
+      teacher.students.forEach(student => {
+        html += `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; border-bottom: 1px solid #eee; direction: rtl;">
+            <div style="flex: 1; text-align: right;">
+              <div style="font-weight: bold; color: #147a3d;">📚 ${student.name}</div>
+              <div style="font-size: 0.85rem; color: #666;">🆔 ${student.id}</div>
+            </div>
+            <button style="background: #f44336; color: white; border: none; padding: 0.5rem 0.8rem; border-radius: 4px; cursor: pointer;" onclick="deleteStudentFromModal('${student.id}', '${student.name}')">🗑 حذف</button>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // حذف طالب من نافذة الإدارة
+    function deleteStudentFromModal(studentId, studentName) {
+      if (!currentTeacher) return;
+      
+      if (confirm(`هل تريد حذف الطالب "${studentName}"؟`)) {
+        const teacher = teachersDB[currentTeacher.code];
+        teacher.students = teacher.students.filter(s => s.id !== studentId);
+        alert('تم حذف الطالب بنجاح ✓');
+        
+        // أعد تحميل القائمة والبيانات
+        renderModalStudentsList();
+        loadTeacherStudents();
+      }
+    }
+
+    // خروج المعلم
+    function logout() {
+      currentTeacher = null;
+      attendanceData = {};
+      document.getElementById('teacherCode').value = '';
+      document.getElementById('loginError').textContent = '';
+      showHomePage();
+    }
+
+    // التعامل مع مفتاح Enter في حقل الكود والرمز السري
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('teacherCode').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('teacherPassword').focus();
+        }
+      });
+
+      document.getElementById('teacherPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          loginTeacher();
+        }
+      });
+
+      document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          loginAdmin();
+        }
+      });
+
+      document.getElementById('studentNameInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          addStudentForm();
+        }
+      });
+
+      // ضع التاريخ الحالي في حقل التصفية
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('filterDate').value = today;
+
+      showHomePage();
+    });
+
+    // ========== دوال لوحة التحكم الإدارية ==========
+
+    // عرض صفحة لوحة التحكم
+    function showDashboardPage() {
+      document.getElementById('homePage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('attendancePage').style.display = 'none';
+      document.getElementById('dashboardPage').style.display = 'block';
+      document.getElementById('mainFooter').style.display = 'none';
+      
+      updateAdminDateDisplay();
+      refreshDashboard();
+    }
+
+    // دالة لتحديث تاريخ الإدارة
+    function updateAdminDateDisplay() {
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('adminDate').textContent = dateStr;
+    }
+
+    // دالة لتحميل وعرض البيانات
+    function refreshDashboard() {
+      const filterTeacher = document.getElementById('filterTeacher').value;
+      const filterDate = document.getElementById('filterDate').value;
+
+      // احصل على كل السجلات من localStorage
+      let allRecords = [];
+      for (let key in localStorage) {
+        if (key.startsWith('attendance_')) {
+          const record = JSON.parse(localStorage[key]);
+          allRecords.push(record);
+        }
+      }
+
+      // طبّق التصفية
+      let filteredRecords = allRecords;
+      
+      if (filterTeacher) {
+        filteredRecords = filteredRecords.filter(r => r.teacherCode === filterTeacher);
+      }
+      
+      if (filterDate) {
+        filteredRecords = filteredRecords.filter(r => r.date === filterDate);
+      }
+
+      // رتب السجلات حسب التاريخ والمعلم
+      filteredRecords.sort((a, b) => {
+        if (a.date !== b.date) {
+          return new Date(b.date) - new Date(a.date);
+        }
+        return a.teacherCode.localeCompare(b.teacherCode);
+      });
+
+      // احسب الإحصائيات
+      const presentCount = filteredRecords.filter(r => r.status === 'present').length;
+      const absentCount = filteredRecords.filter(r => r.status === 'absent').length;
+      const totalCount = filteredRecords.length;
+
+      // اعرض الإحصائيات
+      displayStats(presentCount, absentCount, totalCount);
+
+      // اعرض الجدول
+      displayRecordsTable(filteredRecords);
+    }
+
+    // دالة لعرض الإحصائيات
+    function displayStats(present, absent, total) {
+      const statsSection = document.getElementById('statsSection');
+      statsSection.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">إجمالي السجلات</div>
+          <div class="stat-value">${total}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">حاضرون</div>
+          <div class="stat-value" style="color: #26ac68;">${present}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">غائبون</div>
+          <div class="stat-value" style="color: #f44336;">${absent}</div>
+        </div>
+      `;
+    }
+
+    // دالة لعرض جدول السجلات
+    function displayRecordsTable(records) {
+      const tbody = document.getElementById('recordsBody');
+      const emptyState = document.getElementById('emptyState');
+      const table = document.querySelector('.records-table table');
+
+      if (records.length === 0) {
+        table.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      table.style.display = 'table';
+      emptyState.style.display = 'none';
+
+      tbody.innerHTML = records.map(record => {
+        const statusHTML = record.status === 'present' 
+          ? `<span class="status-present">✓ حاضر</span>` 
+          : `<span class="status-absent">✗ غائب</span>`;
+        
+        const dateFormatted = new Date(record.date).toLocaleDateString('ar-EG');
+        
+        // احصل على اسم المعلم
+        const teacherName = teachersDB[record.teacherCode]?.name || record.teacherCode;
+
+        return `
+          <tr>
+            <td>${dateFormatted}</td>
+            <td>${teacherName}</td>
+            <td>${record.studentName}</td>
+            <td>${statusHTML}</td>
+            <td>${record.notes || '-'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // دالة لتصدير CSV من Dashboard
+    function exportToCSV_Dashboard() {
+      const filterTeacher = document.getElementById('filterTeacher').value;
+      const filterDate = document.getElementById('filterDate').value;
+
+      let allRecords = [];
+      for (let key in localStorage) {
+        if (key.startsWith('attendance_')) {
+          const record = JSON.parse(localStorage[key]);
+          allRecords.push(record);
+        }
+      }
+
+      // طبّق التصفية
+      let filteredRecords = allRecords;
+      
+      if (filterTeacher) {
+        filteredRecords = filteredRecords.filter(r => r.teacherCode === filterTeacher);
+      }
+      
+      if (filterDate) {
+        filteredRecords = filteredRecords.filter(r => r.date === filterDate);
+      }
+
+      if (filteredRecords.length === 0) {
+        alert('لا توجد بيانات لتصديرها');
+        return;
+      }
+
+      let csv = 'التاريخ,المعلم,اسم الطالب,الحالة,الملاحظات\n';
+      
+      filteredRecords.forEach(record => {
+        const dateFormatted = new Date(record.date).toLocaleDateString('ar-EG');
+        const teacherName = teachersDB[record.teacherCode]?.name || record.teacherCode;
+        const status = record.status === 'present' ? 'حاضر' : 'غائب';
+        
+        csv += `${dateFormatted},${teacherName},${record.studentName},${status},"${record.notes}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `attendance_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+    }
+
+    // دالة لخروج الإدارة
+    function logoutAdmin() {
+      showHomePage();
+    }
+
+    // ========== تحديث دالة حفظ السجلات لاستخدام localStorage ==========
+    async function saveAttendanceRecords() {
+      if (Object.keys(attendanceData).length === 0) {
+        alert('الرجاء إضافة طلاب على الأقل');
+        return;
+      }
+
+      let hasUnsaved = false;
+      for (const [name, data] of Object.entries(attendanceData)) {
+        if (!data.status) {
+          hasUnsaved = true;
+          break;
+        }
+      }
+
+      if (hasUnsaved) {
+        if (!confirm('هناك طلاب لم تحدد حالتهم. هل تريد المتابعة على أي حال؟')) {
+          return;
+        }
+      }
+
+      // حفظ كل سجل في localStorage
+      const today = new Date().toISOString().split('T')[0];
+      for (const [name, data] of Object.entries(attendanceData)) {
+        if (data.status) {
+          const recordId = `attendance_${Date.now()}_${Math.random()}`;
+          const record = {
+            id: recordId,
+            teacherCode: currentTeacher.code,
+            studentName: name,
+            status: data.status,
+            notes: data.notes,
+            date: today,
+            timestamp: new Date().toISOString()
+          };
+          localStorage.setItem(recordId, JSON.stringify(record));
+        }
+      }
+
+      alert('تم حفظ البيانات بنجاح ✓');
+      logout();
+    }
+
+    // ========== دوال إدارة الطلاب ==========
+
+    // عرض صفحة إدارة الطلاب
+    function showStudentsManagementPage() {
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('backupReportsPage').style.display = 'none';
+      document.getElementById('studentsManagementPage').style.display = 'block';
+      renderStudentsList_Admin();
+    }
+
+    // إضافة طالب جديد
+    function addNewStudent() {
+      const nameInput = document.getElementById('newStudentName');
+      const classSelect = document.getElementById('newStudentClass');
+      
+      const name = nameInput.value.trim();
+      const classLevel = classSelect.value;
+
+      if (!name) {
+        alert('الرجاء إدخال اسم الطالب');
+        return;
+      }
+
+      addStudent(name, classLevel);
+      alert('تم إضافة الطالب بنجاح ✓');
+      nameInput.value = '';
+      renderStudentsList_Admin();
+    }
+
+    // عرض قائمة الطلاب في صفحة الإدارة
+    function renderStudentsList_Admin() {
+      const students = getAllStudents();
+      const container = document.getElementById('studentsList');
+
+      if (students.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #999;">لا توجد طلاب بعد</p>';
+        return;
+      }
+
+      let html = '';
+      students.forEach(student => {
+        html += `
+          <div class="student-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 0.5rem;">
+            <div style="flex: 1; text-align: right;">
+              <div class="student-name">${student.name}</div>
+              <div style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">${student.class}</div>
+            </div>
+            <div class="status-buttons" style="gap: 0.5rem;">
+              <button class="btn-small" style="background: #2196F3; color: white; padding: 0.5rem 0.8rem; border: none; border-radius: 6px; cursor: pointer;" onclick="editStudent('${student.id}')">✎ تعديل</button>
+              <button class="btn-small" style="background: #f44336; color: white; padding: 0.5rem 0.8rem; border: none; border-radius: 6px; cursor: pointer;" onclick="deleteStudentConfirm('${student.id}', '${student.name}')">🗑 حذف</button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // حذف طالب مع تأكيد
+    function deleteStudentConfirm(studentId, studentName) {
+      if (confirm(`هل تريد بالفعل حذف الطالب: ${studentName}؟`)) {
+        deleteStudent(studentId);
+        alert('تم حذف الطالب بنجاح ✓');
+        renderStudentsList_Admin();
+      }
+    }
+
+    // تعديل طالب (محاكاة)
+    function editStudent(studentId) {
+      const students = getAllStudents();
+      const student = students.find(s => s.id === studentId);
+      
+      if (student) {
+        const newName = prompt('اسم الطالب الجديد:', student.name);
+        if (newName && newName.trim()) {
+          updateStudent(studentId, newName.trim(), student.class);
+          alert('تم تحديث الطالب بنجاح ✓');
+          renderStudentsList_Admin();
+        }
+      }
+    }
+
+    // ========== دوال النسخ الاحتياطية والتقارير ==========
+
+    // عرض صفحة النسخ الاحتياطية
+    function showBackupReportsPage() {
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('studentsManagementPage').style.display = 'none';
+      document.getElementById('backupReportsPage').style.display = 'block';
+      
+      // ضع الشهر والسنة الحالية
+      const today = new Date();
+      document.getElementById('reportMonth').value = today.getMonth() + 1;
+      document.getElementById('reportYear').value = today.getFullYear();
+    }
+
+    // إنشاء وتحميل النسخة الاحتياطية
+    function createAndDownloadBackup() {
+      const backup = createBackup();
+      alert(`تم إنشاء نسخة احتياطية تحتوي على:
+      - ${Object.keys(teachersDB).length} معلم
+      - ${getAllStudents().length} طالب
+      - عدد السجلات: ${backup.attendance.length}`);
+    }
+
+    // استعادة من النسخة الاحتياطية
+    function restoreFromBackup() {
+      const fileInput = document.getElementById('backupFile');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('الرجاء اختيار ملف نسخة احتياطية');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const backupData = JSON.parse(e.target.result);
+          const result = restoreBackup(backupData);
+          alert(result.message);
+          if (result.success) {
+            fileInput.value = '';
+          }
+        } catch (error) {
+          alert('خطأ في قراءة الملف: ' + error.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // توليد وتصدير التقرير الشهري
+    function generateAndExportMonthlyReport() {
+      const year = parseInt(document.getElementById('reportYear').value);
+      const month = parseInt(document.getElementById('reportMonth').value);
+
+      const report = generateMonthlyReport(year, month);
+      
+      if (report.records.length === 0) {
+        alert('لا توجد بيانات لهذا الشهر');
+        return;
+      }
+
+      // توليد CSV
+      let csv = 'تقرير الحضور الشهري\n';
+      csv += `السنة: ${year}, الشهر: ${month}\n\n`;
+      csv += 'إحصائيات عامة:\n';
+      csv += `إجمالي السجلات,${report.statistics.totalRecords}\n`;
+      csv += `حاضرون,${report.statistics.presentCount}\n`;
+      csv += `غائبون,${report.statistics.absentCount}\n\n`;
+      
+      csv += 'التاريخ,المعلم,اسم الطالب,الحالة,الملاحظات\n';
+      
+      report.records.forEach(record => {
+        const dateFormatted = new Date(record.date).toLocaleDateString('ar-EG');
+        const teacherName = teachersDB[record.teacherCode]?.name || record.teacherCode;
+        const status = record.status === 'present' ? 'حاضر' : 'غائب';
+        
+        csv += `${dateFormatted},${teacherName},${record.studentName},${status},"${record.notes}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `monthly_report_${year}_${month}.csv`;
+      link.click();
+
+      alert(`تم تصدير التقرير الشهري بنجاح!\nعدد السجلات: ${report.records.length}`);
+    }
+
+    // إرسال التقرير اليومي بالبريد
+    function sendDailyEmailReport() {
+      const email = document.getElementById('adminEmail').value.trim();
+
+      if (!email) {
+        alert('الرجاء إدخال البريد الإلكتروني');
+        return;
+      }
+
+      if (!email.includes('@')) {
+        alert('الرجاء إدخال بريد إلكتروني صحيح');
+        return;
+      }
+
+      const result = sendDailyReport(email);
+      alert(result.message);
+    }
+
+    // ========== دوال إدارة طلاب المعلمين ==========
+
+    // عرض صفحة إدارة طلاب المعلمين
+    function showTeacherStudentsPage() {
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('studentsManagementPage').style.display = 'none';
+      document.getElementById('backupReportsPage').style.display = 'none';
+      document.getElementById('teacherStudentsPage').style.display = 'block';
+      document.getElementById('selectTeacher').value = '';
+      document.getElementById('addStudentFormContainer').style.display = 'none';
+      document.getElementById('teacherStudentsListContainer').style.display = 'none';
+    }
+
+    // تحميل طلاب المعلم المختار
+    function loadTeacherStudentsForEdit() {
+      const teacherCode = document.getElementById('selectTeacher').value;
+
+      if (!teacherCode) {
+        document.getElementById('addStudentFormContainer').style.display = 'none';
+        document.getElementById('teacherStudentsListContainer').style.display = 'none';
+        return;
+      }
+
+      const teacher = teachersDB[teacherCode];
+      if (!teacher) {
+        alert('المعلم غير موجود');
+        return;
+      }
+
+      document.getElementById('addStudentFormContainer').style.display = 'block';
+      document.getElementById('teacherStudentsListContainer').style.display = 'block';
+      
+      renderTeacherStudentsList(teacherCode);
+    }
+
+    // إضافة طالب للمعلم المختار
+    function addStudentToTeacher() {
+      const teacherCode = document.getElementById('selectTeacher').value;
+      const studentName = document.getElementById('teacherStudentName').value.trim();
+
+      if (!teacherCode) {
+        alert('الرجاء اختيار معلماً');
+        return;
+      }
+
+      if (!studentName) {
+        alert('الرجاء إدخال اسم الطالب');
+        return;
+      }
+
+      const teacher = teachersDB[teacherCode];
+      
+      // تحقق من وجود الطالب مسبقاً
+      if (teacher.students.some(s => s.name === studentName)) {
+        alert('الطالب موجود بالفعل عند هذا المعلم');
+        return;
+      }
+
+      // أضف الطالب الجديد
+      const newStudent = {
+        id: Date.now().toString(),
+        name: studentName
+      };
+
+      teacher.students.push(newStudent);
+      alert('تم إضافة الطالب بنجاح ✓');
+      document.getElementById('teacherStudentName').value = '';
+      renderTeacherStudentsList(teacherCode);
+    }
+
+    // عرض قائمة طلاب المعلم
+    function renderTeacherStudentsList(teacherCode) {
+      const teacher = teachersDB[teacherCode];
+      const container = document.getElementById('teacherStudentsList');
+
+      if (!teacher || !teacher.students || teacher.students.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #999;">لا يوجد طلاب بعد</p>';
+        return;
+      }
+
+      let html = '';
+      teacher.students.forEach(student => {
+        html += `
+          <div class="student-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 0.5rem;">
+            <div style="flex: 1; text-align: right;">
+              <div class="student-name">📚 ${student.name}</div>
+            </div>
+            <div class="status-buttons" style="gap: 0.5rem;">
+              <button class="btn-small" style="background: #f44336; color: white; padding: 0.5rem 0.8rem; border: none; border-radius: 6px; cursor: pointer;" onclick="deleteTeacherStudent('${teacherCode}', '${student.id}', '${student.name}')">🗑 حذف</button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // حذف طالب من معلم
+    function deleteTeacherStudent(teacherCode, studentId, studentName) {
+      if (confirm(`هل تريد حذف الطالب "${studentName}" من المعلم؟`)) {
+        const teacher = teachersDB[teacherCode];
+        teacher.students = teacher.students.filter(s => s.id !== studentId);
+        alert('تم حذف الطالب بنجاح ✓');
+        renderTeacherStudentsList(teacherCode);
+      }
+    }
+
+    // ========== دوال التقارير المخصصة لكل معلم ==========
+
+    // إضافة زر للتقارير المخصصة بالمعلم في Dashboard (اختياري - يمكن إضافته لاحقاً)
+    function generateTeacherReport(teacherCode) {
+      const today = new Date().toISOString().split('T')[0];
+      const records = [];
+
+      for (let key in localStorage) {
+        if (key.startsWith('attendance_')) {
+          const record = JSON.parse(localStorage[key]);
+          if (record.teacherCode === teacherCode && record.date === today) {
+            records.push(record);
+          }
+        }
+      }
+
+      if (records.length === 0) {
+        alert('لا توجد سجلات لهذا المعلم اليوم');
+        return;
+      }
+
+      // توليد CSV
+      let csv = `تقرير الحضور - ${teachersDB[teacherCode].name}\n`;
+      csv += `التاريخ: ${new Date(today).toLocaleDateString('ar-EG')}\n\n`;
+      csv += 'اسم الطالب,الحالة,الملاحظات\n';
+
+      let presentCount = 0;
+      let absentCount = 0;
+
+      records.forEach(record => {
+        const status = record.status === 'present' ? 'حاضر' : 'غائب';
+        if (record.status === 'present') presentCount++;
+        else absentCount++;
+
+        csv += `${record.studentName},${status},"${record.notes}"\n`;
+      });
+
+      csv += `\nالملخص:\n`;
+      csv += `الحاضرون: ${presentCount}\n`;
+      csv += `الغائبون: ${absentCount}\n`;
+      csv += `الإجمالي: ${records.length}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `teacher_report_${teacherCode}_${today}.csv`;
+      link.click();
+
+      alert(`تم تصدير التقرير بنجاح!\nعدد السجلات: ${records.length}`);
+    }
+
+    // ========== دوال التقارير المخصصة للمعلمين ==========
+
+    // عرض صفحة التقارير المخصصة
+    function showTeacherReportsPage() {
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('teacherReportsPage').style.display = 'block';
+      document.getElementById('selectTeacherForReport').addEventListener('change', loadTeacherReportStats);
+    }
+
+    // تحميل إحصائيات المعلم
+    function loadTeacherReportStats() {
+      const teacherCode = document.getElementById('selectTeacherForReport').value;
+
+      if (!teacherCode) {
+        document.getElementById('teacherStatsContainer').innerHTML = '<p style="text-align: center; color: #999;">اختر معلماً لعرض الإحصائيات</p>';
+        return;
+      }
+
+      const records = [];
+      for (let key in localStorage) {
+        if (key.startsWith('attendance_')) {
+          const record = JSON.parse(localStorage[key]);
+          if (record.teacherCode === teacherCode) {
+            records.push(record);
+          }
+        }
+      }
+
+      let presentCount = 0;
+      let absentCount = 0;
+      const studentStats = {};
+
+      records.forEach(record => {
+        if (record.status === 'present') presentCount++;
+        else absentCount++;
+
+        if (!studentStats[record.studentName]) {
+          studentStats[record.studentName] = { present: 0, absent: 0 };
+        }
+        studentStats[record.studentName][record.status === 'present' ? 'present' : 'absent']++;
+      });
+
+      // عرض الإحصائيات
+      let html = `
+        <div class="stats-section">
+          <div class="stat-card">
+            <div class="stat-label">إجمالي السجلات</div>
+            <div class="stat-value">${records.length}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">حاضرون</div>
+            <div class="stat-value" style="color: #26ac68;">${presentCount}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">غائبون</div>
+            <div class="stat-value" style="color: #f44336;">${absentCount}</div>
+          </div>
+        </div>
+      `;
+
+      if (Object.keys(studentStats).length > 0) {
+        html += '<h5 style="color: #147a3d; margin-top: 2rem; margin-bottom: 1rem;">📚 إحصائيات الطلاب:</h5>';
+        html += '<div style="overflow-x: auto;">';
+        html += '<table style="width: 100%; border-collapse: collapse;">';
+        html += '<tr style="background: #f5f5f5;"><th style="padding: 0.75rem; border: 1px solid #ddd; text-align: right;">اسم الطالب</th><th style="padding: 0.75rem; border: 1px solid #ddd;">حاضر</th><th style="padding: 0.75rem; border: 1px solid #ddd;">غائب</th></tr>';
+
+        for (const [studentName, stats] of Object.entries(studentStats)) {
+          html += `<tr><td style="padding: 0.75rem; border: 1px solid #ddd; text-align: right;">${studentName}</td><td style="padding: 0.75rem; border: 1px solid #ddd; text-align: center; color: #26ac68;">${stats.present}</td><td style="padding: 0.75rem; border: 1px solid #ddd; text-align: center; color: #f44336;">${stats.absent}</td></tr>`;
+        }
+
+        html += '</table></div>';
+      }
+
+      document.getElementById('teacherStatsContainer').innerHTML = html;
+    }
+
+    // تصدير التقرير اليومي للمعلم
+    function exportDailyTeacherReport() {
+      const teacherCode = document.getElementById('selectTeacherForReport').value;
+
+      if (!teacherCode) {
+        alert('الرجاء اختيار معلماً');
+        return;
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      const records = [];
+
+      for (let key in localStorage) {
+        if (key.startsWith('attendance_')) {
+          const record = JSON.parse(localStorage[key]);
+          if (record.teacherCode === teacherCode && record.date === today) {
+            records.push(record);
+          }
+        }
+      }
+
+      if (records.length === 0) {
+        alert('لا توجد سجلات لهذا المعلم اليوم');
+        return;
+      }
+
+      generateTeacherReport(teacherCode);
+    }
+
+    // تصدير التقرير الأسبوعي للمعلم
+    function exportWeeklyTeacherReport() {
+      const teacherCode = document.getElementById('selectTeacherForReport').value;
+
+      if (!teacherCode) {
+        alert('الرجاء اختيار معلماً');
+        return;
+      }
+
+      const today = new Date();
+      const last7Days = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const records = [];
+
+      for (let key in localStorage) {
+        if (key.startsWith('attendance_')) {
+          const record = JSON.parse(localStorage[key]);
+          const recordDate = new Date(record.date);
+          if (record.teacherCode === teacherCode && recordDate >= last7Days && recordDate <= today) {
+            records.push(record);
+          }
+        }
+      }
+
+      if (records.length === 0) {
+        alert('لا توجد سجلات لهذا المعلم في آخر 7 أيام');
+        return;
+      }
+
+      // توليد CSV
+      const teacher = teachersDB[teacherCode];
+      let csv = `التقرير الأسبوعي - ${teacher.name}\n`;
+      csv += `من ${last7Days.toLocaleDateString('ar-EG')} إلى ${today.toLocaleDateString('ar-EG')}\n\n`;
+      csv += 'التاريخ,اسم الطالب,الحالة,الملاحظات\n';
+
+      let presentCount = 0;
+      let absentCount = 0;
+
+      records.forEach(record => {
+        const status = record.status === 'present' ? 'حاضر' : 'غائب';
+        const dateFormatted = new Date(record.date).toLocaleDateString('ar-EG');
+        if (record.status === 'present') presentCount++;
+        else absentCount++;
+
+        csv += `${dateFormatted},${record.studentName},${status},"${record.notes}"\n`;
+      });
+
+      csv += `\nالملخص:\n`;
+      csv += `الحاضرون: ${presentCount}\n`;
+      csv += `الغائبون: ${absentCount}\n`;
+      csv += `الإجمالي: ${records.length}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `weekly_report_${teacherCode}_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+
+      alert(`تم تصدير التقرير الأسبوعي بنجاح!\nعدد السجلات: ${records.length}`);
+    }
+  </script>
+</body>
+</html>
