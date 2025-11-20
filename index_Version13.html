@@ -94,6 +94,41 @@
       direction: rtl;
       text-align: center;
     }
+    
+    /* ========== PROFILE IMAGE STYLES ========== */
+    .profile-image-container {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 150;
+      animation: slideIn 0.5s ease-out;
+    }
+    .profile-image {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 3px solid #147a3d;
+      box-shadow: 0 4px 15px rgba(20, 122, 61, 0.3), 0 0 20px rgba(20, 122, 61, 0.1);
+      object-fit: cover;
+      overflow: hidden;
+      background: white;
+      transition: all 0.3s ease;
+    }
+    .profile-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(20, 122, 61, 0.4), 0 0 30px rgba(20, 122, 61, 0.2);
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
     /* ========== Login Page Styles ========== */
     .login-container {
       display: flex;
@@ -345,6 +380,16 @@
       .login-card {
         padding: 1.5rem;
       }
+      .profile-image {
+        width: 100px;
+        height: 100px;
+        top: 1rem;
+        left: 1rem;
+      }
+      .profile-image-container {
+        top: 1rem;
+        left: 1rem;
+      }
     }
     
     /* ========== Dashboard Styles ========== */
@@ -506,6 +551,12 @@
   </style>
 </head>
 <body>
+  <!-- صورة الشيخ الملهم بشكل دائري -->
+  <!-- ملاحظة: أضف الصورة الفعلية باسم "sheikh.jpg" أو "sheikh.png" في نفس المجلد -->
+  <div class="profile-image-container">
+    <img src="sheikh.jpg" alt="الشيخ سعد بن محمود أبو نوارج" class="profile-image" title="الشيخ سعد بن محمود أبو نوارج" onerror="this.src='https://via.placeholder.com/100/1a5d3b/ffffff?text=%D8%A7%D9%84%D8%B4%D9%8A%D8%AE'">
+  </div>
+  
   <!-- صفحة الترحيب الرئيسية -->
   <div id="homePage" class="container-fluid px-2" dir="rtl">
     <div class="main-title mb-1">مكتب تحفيظ الشيخ سعد بن محمود أبو نوارج</div>
@@ -918,6 +969,8 @@
       document.getElementById('attendancePage').style.display = 'none';
       document.getElementById('dashboardPage').style.display = 'none';
       document.getElementById('mainFooter').style.display = 'block';
+      // إظهار الصورة فقط في الصفحة الرئيسية
+      document.querySelector('.profile-image-container').style.display = 'block';
     }
 
     // عرض صفحة الدخول الإدارية
@@ -928,6 +981,8 @@
       document.getElementById('attendancePage').style.display = 'none';
       document.getElementById('dashboardPage').style.display = 'none';
       document.getElementById('mainFooter').style.display = 'none';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       document.getElementById('adminPassword').focus();
     }
 
@@ -958,6 +1013,8 @@
       document.getElementById('loginPage').style.display = 'flex';
       document.getElementById('attendancePage').style.display = 'none';
       document.getElementById('mainFooter').style.display = 'none';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       document.getElementById('teacherCode').focus();
     }
 
@@ -967,6 +1024,8 @@
       document.getElementById('loginPage').style.display = 'none';
       document.getElementById('attendancePage').style.display = 'block';
       document.getElementById('mainFooter').style.display = 'none';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       updateDateDisplay();
       loadTeacherStudents();
     }
@@ -1277,6 +1336,8 @@
       document.getElementById('attendancePage').style.display = 'none';
       document.getElementById('dashboardPage').style.display = 'block';
       document.getElementById('mainFooter').style.display = 'none';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       
       updateAdminDateDisplay();
       refreshDashboard();
@@ -1495,6 +1556,8 @@
       document.getElementById('dashboardPage').style.display = 'none';
       document.getElementById('backupReportsPage').style.display = 'none';
       document.getElementById('studentsManagementPage').style.display = 'block';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       renderStudentsList_Admin();
     }
 
@@ -1577,6 +1640,8 @@
       document.getElementById('dashboardPage').style.display = 'none';
       document.getElementById('studentsManagementPage').style.display = 'none';
       document.getElementById('backupReportsPage').style.display = 'block';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       
       // ضع الشهر والسنة الحالية
       const today = new Date();
@@ -1684,6 +1749,8 @@
       document.getElementById('studentsManagementPage').style.display = 'none';
       document.getElementById('backupReportsPage').style.display = 'none';
       document.getElementById('teacherStudentsPage').style.display = 'block';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       document.getElementById('selectTeacher').value = '';
       document.getElementById('addStudentFormContainer').style.display = 'none';
       document.getElementById('teacherStudentsListContainer').style.display = 'none';
@@ -1840,6 +1907,8 @@
     function showTeacherReportsPage() {
       document.getElementById('dashboardPage').style.display = 'none';
       document.getElementById('teacherReportsPage').style.display = 'block';
+      // إخفاء الصورة
+      document.querySelector('.profile-image-container').style.display = 'none';
       document.getElementById('selectTeacherForReport').addEventListener('change', loadTeacherReportStats);
     }
 
